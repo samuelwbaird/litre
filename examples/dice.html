@@ -1,0 +1,65 @@
+<html>
+	<!--
+		An example dice roller app using this library
+		copyright 2022 Samuel Baird MIT Licence
+		
+		Enter a dice specification in text, eg. 4D6 + 2
+		Roll to see a result, then many results, then percentage spread
+		Animate and update results
+		Keep a history of recent rolls
+		
+		Expand with additional rules, eg. 2D20, best of 2
+		Add a canvas to show rolling animation		
+		
+		Features to demostrate:
+		* top level app state
+		* state in loading, load some resources and move to main state
+		* show/hide HTML features
+		* use a block of HTML as a template
+		* logical sizing of HTML elements and touch handling
+		* coroutines, & tweens
+	-->
+	<head>
+		<title>Litre dice roller example</title>
+		<style>
+			html {
+				width: 100%;
+				height : 100%;
+				overflow: hidden;
+			}
+			body { 
+				width: 100%;
+				height : 100%;
+				overflow: hidden;
+			    font-family: sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="screen">
+			<div id="header">
+				Header
+			</div>
+			<div id="ui">
+				UI
+			</div>
+			<div id="results">
+				Results
+			</div>
+			<div id="history">
+				Roll history
+			</div>
+		</div>
+		
+		<script type="module">
+		import * as litre from '../lib/litre/litre.js';
+		const app = litre.launch_app();
+		
+		app.set_dom_screen(document.getElementById('screen'), 480, 320);
+		
+		import dice_app from './js/dice_app.js';
+		app.set_scene(new dice_app());		
+		</script>
+		
+	</body>
+</html>
