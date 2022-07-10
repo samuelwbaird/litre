@@ -37,28 +37,33 @@
 	</head>
 	<body>
 		<div id="screen">
-			<div id="header">
+			<div id="header" style="display: none;">
 				Header
 			</div>
-			<div id="ui">
+			<div id="ui" style="display: none;">
 				UI
 			</div>
-			<div id="results">
+			<div id="results" style="display: none;">
 				Results
 			</div>
-			<div id="history">
+			<div id="history" style="display: none;">
 				Roll history
 			</div>
 		</div>
 		
 		<script type="module">
 		import * as litre from '../lib/litre/litre.js';
-		const app = litre.launch_app();
-		
-		app.set_dom_screen(document.getElementById('screen'), 480, 320);
-		
+		import * as loading_sceene from './js/loading_scene.js';
 		import dice_app from './js/dice_app.js';
-		app.set_scene(new dice_app());		
+
+		const app = litre.launch_app();
+		app.set_dom_screen(document.getElementById('screen'), 480, 320);
+		app.hook(() => {
+			// top level state switch
+		});
+		
+		// app.set_scene(new loading_scene.loading_scene());
+		// app.set_scene(new dice_app());
 		</script>
 		
 	</body>

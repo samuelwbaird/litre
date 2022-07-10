@@ -19,3 +19,23 @@ The main ideas informing this new version are:
  * revisit propagtion of events
  * revisit handling of special case timers and hooks
 
+###Examples
+Run a basic web server from the root directory
+
+	python -m SimpleHTTPServer
+
+
+#### Dice
+Working on a dice roller / live character sheet for a dice pool based TTRPG.
+
+Open http://localhost:8000/examples/dice.html in the browser
+
+
+TODO
+
+ * finish app\_node and dom integration, clone, show, listen etc.
+ * state switching, tagged
+ * resource loading queries, then image, then ?
+ * screen space touch handling
+ * tween some nodes
+
