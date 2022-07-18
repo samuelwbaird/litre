@@ -28,7 +28,7 @@ Run a basic web server from the root directory
 #### Dice
 Working on a dice roller / live character sheet for a dice pool based TTRPG.
 
-Open http://localhost:8000/examples/dice.html in the browser
+Open http://localhost:8000/example/ in the browser
 
 
 TODO

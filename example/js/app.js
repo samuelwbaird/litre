@@ -1,6 +1,6 @@
 import { resource, sequence, state, dom, app_node } from '../../lib/litre/litre.js';
 
-class dice_app extends app_node {
+class app extends app_node {
 
 	begin () {
 		super.begin();
@@ -12,4 +12,4 @@ class dice_app extends app_node {
 
 }
 
-export default dice_app;
+export default app;
