@@ -1,0 +1,143 @@
+html {
+	width: 100%;
+	height : 100%;
+	overflow: hidden;
+}
+body {
+	width: 100%;
+	height : 100%;
+	overflow: hidden;
+    font-family: sans-serif;
+}
+input.txt_add {
+	font-size: 14px;
+	width: 200px;
+	margin: 4px;
+	padding: 0px;
+	border: 1px solid #888;
+	border-radius: 2px;
+}
+input.btn_add {
+	position: absolute;
+	left: 212px;
+
+	width: 60px;
+	margin: 4px;
+	padding: 0px;
+}
+p.helptext {
+	font-size: 10px;
+	background: #EEDDAA;
+	width: 264px;
+	margin: 4px;
+	padding: 0px;
+}
+div.div_roll {
+	width: 262px;
+	height: 32px;
+	border: 2px solid #777;
+	border-radius: 8px;
+	margin: 4px;
+	padding: 0px;
+	background: #fffffa;
+}
+span.txt_roll_label {
+	display: inline-block;
+	font-size: 14px;
+	padding: 0px;
+	background: #ddffee;
+	min-width: 80px;
+	text-align: right;
+	margin: 6px 0px auto 8px;
+	padding: 2px;
+}
+span.txt_roll_dice {
+	display: inline-block;
+	font-size: 14px;
+	background: #ddeeff;
+	margin: 6px 0px auto 0px;
+	padding: 2px;
+	min-width: 80px;
+}
+input.btn_delete {
+	display: inline-block;
+	margin: 7px auto auto 0px;
+	padding: 0px;
+	font-size: 6px;
+	position: absolute;
+	left: 214px;
+	width: 54px;
+}
+
+div.div_roll_history {
+	width: 262px;
+	height: 32px;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	margin: 4px;
+	padding: 0px;
+	background: #eeeee;
+}
+span.txt_roll_label_history {
+	display: inline-block;
+	font-size: 14px;
+	padding: 0px;
+	background: #eefff7;
+	min-width: 80px;
+	text-align: right;
+	margin: 6px 0px auto 8px;
+	padding: 2px;
+	color: #333;
+}
+span.txt_roll_result {
+	display: inline-block;
+	font-size: 14px;
+	margin: 6px 0px auto 0px;
+	padding: 2px;
+	min-width: 80px;
+	color: #333;
+}
+
+div.div_roll_table {
+	width: 264px;
+	height: 100px;
+	border: 1px solid #431;
+	border-radius: 4px;
+	margin: 4px;
+	padding: 0px;
+	background: #242;
+}
+
+div.div_dice_value {
+	width: 32px;
+	height: 32px;
+	border: 1px solid #411;
+	border-radius: 2px;
+	background: #a11;
+	margin: 4px;
+}
+span.txt_dice_value {
+	display: inline-block;
+	margin: 6px 0px auto 0px;
+	width: 32;
+	font-size: 20px;
+	color: #fff;
+	text-align: center;
+}
+
+div.div_modifier_value {
+	width: 30px;
+	height: 30px;
+	border: 2px solid #ccc;
+	border-radius: 2px;
+	background: #fff;
+	margin: 4px;
+}
+span.txt_modifier_value {
+	display: inline-block;
+	margin: 4px 0px auto 0px;
+	width: 30;
+	font-size: 20px;
+	color: #333;
+	text-align: center;
+}

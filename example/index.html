@@ -2,15 +2,15 @@
 	<!--
 		An example dice roller app using this library
 		copyright 2022 Samuel Baird MIT Licence
-		
+
 		Enter a dice specification in text, eg. 4D6 + 2
 		Roll to see a result, then many results, then percentage spread
 		Animate and update results
 		Keep a history of recent rolls
-		
+
 		Expand with additional rules, eg. 2D20, best of 2
-		Add a canvas to show rolling animation		
-		
+		Add a canvas to show rolling animation
+
 		Features to demostrate:
 		* top level app state
 		* state in loading, load some resources and move to main state
@@ -21,49 +21,76 @@
 	-->
 	<head>
 		<title>Litre dice roller example</title>
-		<style>
-			html {
-				width: 100%;
-				height : 100%;
-				overflow: hidden;
-			}
-			body { 
-				width: 100%;
-				height : 100%;
-				overflow: hidden;
-			    font-family: sans-serif;
-			}
-		</style>
+		<link href="css/styles.css" rel="stylesheet">
 	</head>
 	<body>
-		<div id="screen">
-			<div id="header" style="display: none;">
-				Header
-			</div>
-			<div id="ui" style="display: none;">
-				UI
-			</div>
-			<div id="results" style="display: none;">
-				Results
-			</div>
-			<div id="history" style="display: none;">
-				Roll history
-			</div>
+		<!-- a space to roll dice -->
+		<div class="div_roll_table">
 		</div>
 		
-		<script type="module">
-		import * as litre from '../lib/litre/litre.js';
-		import * as loading_sceene from './js/loading_scene.js';
+		<!-- dice results -->
+		<div class="div_dice_value">
+			<span class="txt_dice_value">6</span>
+		</div>
 
-		const app = litre.launch_app();
-		app.set_dom_screen(document.getElementById('screen'), 480, 320);
-		app.hook(() => {
-			// top level state switch
-		});
+		<!-- modifer results -->
+		<div class="div_modifier_value">
+			<span class="txt_modifier_value">4</span>
+		</div>
 		
-		// app.set_scene(new loading_scene.loading_scene());
-		// app.set_scene(new dice_app());
+		<!-- a history of results -->
+		<div class="div_roll_history">
+			<span class="txt_roll_label_history">Attack</span>
+			<span class="txt_roll_result">11</span>
+		</div>
+
+		<!-- new roll type entry -->
+		<div>
+			<input class="txt_add" type="text" placeholder="Attack: 2D6+3"></input><input class="btn_add" type="submit" value="Add"/><br>
+			<p class="helptext">Enter new types of dice rolls in this form, label: dice spec<br>Where dice spec is of the common form XDY+Z, eg. D20 + 5, 2D8 -1
+			</p>
+		<div>
+
+		<!-- existing roll in inventory -->
+		<div class="div_roll" onclick="alert('you rolled');" style="cursor: pointer;">
+			<span class="txt_roll_label">Attack</span>
+			<span class="txt_roll_dice">2D6 + 4</span>
+			<input class="btn_delete" type="submit" value="Remove" onclick="event.stopPropagation(); alert('you removed');"/>
+		</div>
+
+		<div id="loading_layer" style="position: absolute; top: 0px; left: 0px; margin: 5px; padding: 10px; color: #fff; background:#666;">
+			<p>loading</p>
+		</div>
+
+		<script type="module" charset="UTF-8">
+			// launch app with nominal sizing
+			import * as litre from '../lib/litre/litre.js';
+
+			import * as controller from './js/controller.js';
+			import loading_scene from './js/loading_scene.js';
+			import app_scene from './js/app_scene.js';
+
+			const app = litre.launch_app();
+			const top_level_state = new litre.state.state_switch([
+				// stay in the loading state until loaded
+				[ 'loading_state', () => { app.set_scene(new loading_scene()); }],
+				// current API session is valid
+				// [ 'establish_session_state', () => { app.set_scene(new establish_session_scene()); }],
+				// main state of the app
+				[ 'app_state', (state) => { app.set_scene(new app_scene(state)); }],
+				// reset to a blank slate on window resize, full node reset
+				[ 'reset_on_resize', () => { app.set_scene(new litre.app_node()); }],
+			]);
+
+			// refresh app node tree from current controller state
+			app.hook(() => {
+				top_level_state.update(controller.app_state());
+			});
+
+			// force a reset in state on window resize
+			window.addEventListener('resize', () => {
+				top_level_state.update(litre.state.atom('reset_on_resize'));
+			});
 		</script>
-		
 	</body>
 </html>

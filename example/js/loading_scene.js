@@ -1,11 +1,18 @@
+// Copyright 2022 Samuel Baird
 import { resource, sequence, state, dom, app_node } from '../../lib/litre/litre.js';
-
-let assets_are_loaded = false;
+import * as controller from './controller.js';
 
 class loading_scene extends app_node {
 
 	begin () {
 		super.begin();
+		// associate displaying this element, with this app node
+		this.get_dom('loading_layer').show();
+		
+		// pretend we were loading in assets
+		this.get_frame_dispatch().delay(30, () => {
+			controller.set_assets_are_loaded();
+		});
 	}
 
 	update () {
@@ -14,4 +21,4 @@ class loading_scene extends app_node {
 
 }
 
-export { loading_scene, assets_are_loaded };
+export default loading_scene;
