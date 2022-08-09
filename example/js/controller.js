@@ -4,7 +4,7 @@ import { resource, sequence, state, dom, app_node } from '../../lib/litre/litre.
 let assets_are_loaded = false;
 let settings = {};
 
-function set_assets_are_loaded() {
+function set_assets_are_loaded () {
 	assets_are_loaded = true;
 }
 
@@ -22,7 +22,7 @@ if (saved_settings != null) {
 	settings = saved_settings;
 }
 
-function save_settings(settings) {
+function save_settings (settings) {
 	window.localStorage.setItem('dice_roller_settings', JSON.stringify(settings));
 }
 

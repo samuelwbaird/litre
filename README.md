@@ -23,6 +23,7 @@ The main ideas informing this new version are:
 Run a basic web server from the root directory
 
 	python -m SimpleHTTPServer
+	python3 -m http.server
 
 
 #### Dice
@@ -33,9 +34,13 @@ Open http://localhost:8000/example/ in the browser
 
 TODO
 
- * finish app\_node and dom integration, clone, show, listen etc.
- * state switching, tagged
+ * dom integration, should there be a dom link object or should the dom elements become wrapped (and unwrapped), should it try to transparently wrap using proxy instead of modify? (two identity problem)
+ * continue work on dice roller and see if a non-positioned approach works well (position two columns only)
+ * check that template spec can set event listeners
+ * template update spec for lists (parent, collection, mapping function)
+ * tween some nodes
+ * maybe when the template populates a list, the parent node should be marked up with methods to help maintain that list (or provide functionality like sort, or drag)
+ * app node switch and list state mapping
  * resource loading queries, then image, then ?
  * screen space touch handling
- * tween some nodes
 

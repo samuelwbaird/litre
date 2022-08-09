@@ -7,8 +7,8 @@ class loading_scene extends app_node {
 	begin () {
 		super.begin();
 		// associate displaying this element, with this app node
-		this.get_dom('loading_layer').show();
-		
+		this.wrap('loading_layer').show(true);
+
 		// pretend we were loading in assets
 		this.get_frame_dispatch().delay(30, () => {
 			controller.set_assets_are_loaded();
