@@ -27,11 +27,52 @@ class app_scene extends app_node {
 			this.column1 = this.column2 = screen.add('div').position((app.dom_screen.width - 274) / 2, 10);
 		}
 
+		const add_roll = (roll) => {
+			try {
+				const parsed_roll = controller.parse_roll(roll);
+				const div_roll = this.column2.clone('template_roll', [
+					['.txt_roll_hidden', 'value', roll],
+					['.txt_roll_label', 'innerText', parsed_roll.name + ':'],
+					['.txt_roll_dice', 'innerText', parsed_roll.description],
+					['', 'onclick', (e) => {
+						alert(roll);
+					}],
+					['.btn_delete', 'onclick', (e) => {
+						e.stopPropagation(); // no click through
+						controller.remove_roll(div_roll.node('.txt_roll_hidden').element.value);
+						div_roll.remove();
+					}],
+				]);
+			} catch (error) {
+				controller.remove_roll(roll);
+			}
+		};
+
 		this.column1.clone('template_table');
 		if (this.show_history) {
 
 		}
-		this.column2.clone('template_add_roll');
+		const div_add = this.column2.clone('template_add_roll', [
+			['.btn_add', 'onclick', () => {
+				const new_roll = div_add.node('.txt_add').element.value;
+				try {
+					// see if we can successfully parse it or error out
+					const parsed_roll = controller.parse_roll(new_roll);
+					// add the new roll to the user data
+					controller.add_roll(parsed_roll.name +': ' + parsed_roll.description);
+					// add the new roll to the layout
+					add_roll(new_roll);
+					// reset the textbox
+					div_add.node('.txt_add').element.value = '';
+				} catch (error) {
+					alert(error);
+				}
+			}],
+		]);
+
+		for (const roll of this.settings.rolls) {
+			add_roll(roll);
+		}
 	}
 
 	update () {

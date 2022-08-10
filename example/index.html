@@ -64,6 +64,7 @@
 		<!-- existing roll in inventory -->
 		<template id="template_roll">
 			<div class="div_roll" onclick="alert('you rolled');" style="cursor: pointer;">
+				<input class="txt_roll_hidden" type="hidden"></input>
 				<span class="txt_roll_label">Attack</span>
 				<span class="txt_roll_dice">2D6 + 4</span>
 				<input class="btn_delete" type="submit" value="Remove" onclick="event.stopPropagation(); alert('you removed');"/>
