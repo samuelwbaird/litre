@@ -20,11 +20,32 @@ class app_scene extends app_node {
 			// create two columns
 			this.column1 = screen.add('div').position((app.dom_screen.width / 2) - 279, 10);
 			this.column2 = screen.add('div').position((app.dom_screen.width / 2) + 5, 10);
-			this.show_history = true;
+			this.column1.clone('template_table');
+			this.history_parent = this.column1.add('div');
 		} else {
 			app.set_dom_screen(screen, 300, 480);
 			// create one column
 			this.column1 = this.column2 = screen.add('div').position((app.dom_screen.width - 274) / 2, 10);
+			this.column1.clone('template_table');
+		}
+
+		// allow scroll if we need it
+		screen.element.style.overflow = 'auto';
+		
+		const add_history = (name, total) => {
+			if (!this.history_parent) {
+				return;
+			}
+			while (this.history_parent.element.children.length > 10) {
+				this.history_parent.element.removeChild(this.history_parent.element.lastChild);
+			}
+			
+			const div_roll_history = this.history_parent.clone('template_roll_history', [
+				['.txt_roll_label_history', 'innerText', name + ':'],
+				['.txt_roll_result', 'innerText', total],
+			]);
+
+			this.history_parent.element.insertBefore(div_roll_history.element, this.history_parent.element.firstChild);
 		}
 
 		const add_roll = (roll) => {
@@ -35,7 +56,9 @@ class app_scene extends app_node {
 					['.txt_roll_label', 'innerText', parsed_roll.name + ':'],
 					['.txt_roll_dice', 'innerText', parsed_roll.description],
 					['', 'onclick', (e) => {
-						alert(roll);
+						const result = Math.floor(Math.random() * 20 + 1);
+						add_history(parsed_roll.name, result);
+						controller.add_to_history(parsed_roll.name, result);
 					}],
 					['.btn_delete', 'onclick', (e) => {
 						e.stopPropagation(); // no click through
@@ -48,9 +71,8 @@ class app_scene extends app_node {
 			}
 		};
 
-		this.column1.clone('template_table');
-		if (this.show_history) {
-
+		for (const previous_roll of this.settings.history) {
+			add_history(previous_roll.name, previous_roll.result);
 		}
 		const div_add = this.column2.clone('template_add_roll', [
 			['.btn_add', 'onclick', () => {

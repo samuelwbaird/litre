@@ -13,6 +13,9 @@ if (saved_settings != null) {
 if (!settings.rolls) {
 	settings.rolls = [];
 }
+if (!settings.history) {
+	settings.history = [];
+}
 
 function set_assets_are_loaded () {
 	assets_are_loaded = true;
@@ -78,7 +81,7 @@ function parse_roll (roll) {
 			description = description + (next_is_positive ? '' : '-') + number + 'D' + dice_type + ' ';
 			next_is_positive = true;
 		} else if (eat(/^[0-9]+/i, true)) {
-			const number = parseInt(eat(/^[0-9]+/i))
+			const number = parseInt(eat(/^[0-9]+/i));
 			description = description + (next_is_positive ? '+' : '-') + number + ' ';
 			modifiers.push(number * (next_is_positive ? 1 : -1));
 			next_is_positive = true;
@@ -116,4 +119,8 @@ function remove_roll (roll) {
 	}
 }
 
-export { app_state, set_assets_are_loaded, save_settings, parse_roll, add_roll, remove_roll };
+function add_to_history (name, total) {
+
+}
+
+export { app_state, set_assets_are_loaded, save_settings, parse_roll, add_roll, remove_roll, add_to_history };
