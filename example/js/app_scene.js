@@ -31,7 +31,7 @@ class app_scene extends app_node {
 
 		// allow scroll if we need it
 		screen.element.style.overflow = 'auto';
-		
+
 		const add_history = (name, total) => {
 			if (!this.history_parent) {
 				return;
@@ -39,14 +39,14 @@ class app_scene extends app_node {
 			while (this.history_parent.element.children.length > 10) {
 				this.history_parent.element.removeChild(this.history_parent.element.lastChild);
 			}
-			
+
 			const div_roll_history = this.history_parent.clone('template_roll_history', [
 				['.txt_roll_label_history', 'innerText', name + ':'],
 				['.txt_roll_result', 'innerText', total],
 			]);
 
 			this.history_parent.element.insertBefore(div_roll_history.element, this.history_parent.element.firstChild);
-		}
+		};
 
 		const add_roll = (roll) => {
 			try {
