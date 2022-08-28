@@ -129,7 +129,7 @@ div.div_dice_value {
 	border-radius: 2px;
 	background: #a11;
 	margin: 4px;
-	transform: translate(-50%, -50%);
+	transform-origin: center;
 }
 span.txt_dice_value {
 	display: inline-block;
@@ -147,7 +147,7 @@ div.div_modifier_value {
 	border-radius: 2px;
 	background: #fff;
 	margin: 4px;
-	transform: translate(-50%, -50%);
+	transform-origin: center;
 }
 span.txt_modifier_value {
 	display: inline-block;

@@ -123,7 +123,7 @@ class app_scene extends app_node {
 		
 		let padding = 40;
 		let space = (264 - padding) / count;
-		let x = (space + padding) * 0.5;
+		let x = (space + padding) * 0.5 - 16;
 		
 		// roll each dice in the parsed roll
 		// then add the set modifiers
@@ -135,25 +135,47 @@ class app_scene extends app_node {
 			const div_roll = this.column1.clone('template_dice_value', [
 				['.txt_dice_value', 'innerText', this_dice],
 			]);
-			div_roll.position(x, 45);
+			
+			// let's tween it into place
+			div_roll.position(x - 100, 29 - 40);
+			for (let i = 0; i <= 35; i++) {
+				this.get_frame_dispatch().delay(i, () => {
+					div_roll.element.style.transform = 'rotate(' + (Math.random() * 360 * ((35-i)/35)) + 'deg)';
+				});
+			}
+			this.tween(div_roll.element.style, sequence.easing.ease_out(50), {
+				left: x, 
+			});
+			this.tween(div_roll.element.style, sequence.easing.interpolate([0, 1, 0.5, 1, 0.75, 1], 45), {
+				top: 29,
+			});
+			
+			
 			result += this_dice;
 			this.roll_elements.push(div_roll);
 			
 			// wait between each step
-			yield sequence.yield_frames(30);
+			yield sequence.yield_frames(25);
 			x += space;
 		}
+		
+		yield sequence.yield_frames(20);	
 		
 		for (const m of parsed_roll.modifiers) {
 			const div_roll = this.column1.clone('template_modifier_value', [
 				['.txt_modifier_value', 'innerText', m],
 			]);
-			div_roll.position(x, 45);
+			div_roll.position(x, 29);
 			result += m;
 			this.roll_elements.push(div_roll);
 		
+			div_roll.element.style.opacity = 0;
+			this.tween(div_roll.element.style, sequence.easing.linear(20), {
+				opacity: 1,
+			});
+		
 			// wait between each step
-			yield sequence.yield_frames(30);
+			yield sequence.yield_frames(1);
 			x += space;
 		}
 		
