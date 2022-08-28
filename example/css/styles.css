@@ -107,7 +107,21 @@ div.div_roll_table {
 	padding: 0px;
 	background: #242;
 }
-
+div.txt_table_title {
+	width: 100%;
+	font-size: 20px;
+	color: #fff;
+	text-align: center;
+}
+div.txt_table_result {
+	width: 100%;
+	position: absolute;
+	left: 0px;
+	top: 70px;
+	font-size: 24px;
+	color: #fff;
+	text-align: center;	
+}
 div.div_dice_value {
 	width: 32px;
 	height: 32px;
@@ -115,6 +129,7 @@ div.div_dice_value {
 	border-radius: 2px;
 	background: #a11;
 	margin: 4px;
+	transform: translate(-50%, -50%);
 }
 span.txt_dice_value {
 	display: inline-block;
@@ -132,6 +147,7 @@ div.div_modifier_value {
 	border-radius: 2px;
 	background: #fff;
 	margin: 4px;
+	transform: translate(-50%, -50%);
 }
 span.txt_modifier_value {
 	display: inline-block;

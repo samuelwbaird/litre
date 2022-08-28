@@ -16,6 +16,12 @@ if (!settings.rolls) {
 if (!settings.history) {
 	settings.history = [];
 }
+if (settings.rolls.length == 0) {
+	// some default data
+	add_roll('Attack: D20 + 5');
+	add_roll('Defend: 2D6 + 2');
+	add_roll('Save (bane): D20 - D4');
+}
 
 function set_assets_are_loaded () {
 	assets_are_loaded = true;
@@ -56,7 +62,7 @@ function parse_roll (roll) {
 	};
 
 	// first eat the name
-	const name = eat(/^[A-Z]+/i);
+	const name = eat(/^[A-Z0-9 \(\)]+/i);
 	if (!name) {
 		throw 'roll must begin with a name, eg. Attack:';
 	}

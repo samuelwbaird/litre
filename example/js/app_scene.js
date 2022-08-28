@@ -7,6 +7,7 @@ class app_scene extends app_node {
 		super();
 		this.settings = game_state.props.settings;
 		this.layout = 'vertical';
+		this.roll_elements = [];
 	}
 
 	begin () {
@@ -20,14 +21,16 @@ class app_scene extends app_node {
 			// create two columns
 			this.column1 = screen.add('div').position((app.dom_screen.width / 2) - 279, 10);
 			this.column2 = screen.add('div').position((app.dom_screen.width / 2) + 5, 10);
-			this.column1.clone('template_table');
-			this.history_parent = this.column1.add('div');
+			this.history_length = 10;
 		} else {
 			app.set_dom_screen(screen, 300, 480);
 			// create one column
 			this.column1 = this.column2 = screen.add('div').position((app.dom_screen.width - 274) / 2, 10);
-			this.column1.clone('template_table');
+			this.history_length = 2;
 		}
+
+		this.table = this.column1.clone('template_table');
+		this.history_parent = this.column1.add('div');
 
 		// allow scroll if we need it
 		screen.element.style.overflow = 'auto';
@@ -36,7 +39,7 @@ class app_scene extends app_node {
 			if (!this.history_parent) {
 				return;
 			}
-			while (this.history_parent.element.children.length > 10) {
+			while (this.history_parent.element.children.length >= this.history_length) {
 				this.history_parent.element.removeChild(this.history_parent.element.lastChild);
 			}
 
@@ -46,9 +49,12 @@ class app_scene extends app_node {
 			]);
 
 			this.history_parent.element.insertBefore(div_roll_history.element, this.history_parent.element.firstChild);
+			
+			div_roll_history.element.style.opacity = 0;
+			this.tween(div_roll_history.element.style, sequence.easing.linear(20), { opacity: 1 });
 		};
 
-		const add_roll = (roll) => {
+		const add_roll = (roll, fade_in) => {
 			try {
 				const parsed_roll = controller.parse_roll(roll);
 				const div_roll = this.column2.clone('template_roll', [
@@ -56,9 +62,8 @@ class app_scene extends app_node {
 					['.txt_roll_label', 'innerText', parsed_roll.name + ':'],
 					['.txt_roll_dice', 'innerText', parsed_roll.description],
 					['', 'onclick', (e) => {
-						const result = Math.floor(Math.random() * 20 + 1);
-						add_history(parsed_roll.name, result);
-						controller.add_to_history(parsed_roll.name, result);
+						this.get_coroutine_manager().clear();
+						this.run(this.roll_the_dice, parsed_roll, add_history);
 					}],
 					['.btn_delete', 'onclick', (e) => {
 						e.stopPropagation(); // no click through
@@ -66,6 +71,11 @@ class app_scene extends app_node {
 						div_roll.remove();
 					}],
 				]);
+			
+				if (fade_in) {
+					div_roll.element.style.opacity = 0;
+					this.tween(div_roll.element.style, sequence.easing.linear(20), { opacity: 1 });
+				}
 			} catch (error) {
 				controller.remove_roll(roll);
 			}
@@ -83,7 +93,7 @@ class app_scene extends app_node {
 					// add the new roll to the user data
 					controller.add_roll(parsed_roll.name +': ' + parsed_roll.description);
 					// add the new roll to the layout
-					add_roll(new_roll);
+					add_roll(new_roll, true);
 					// reset the textbox
 					div_add.node('.txt_add').element.value = '';
 				} catch (error) {
@@ -93,12 +103,76 @@ class app_scene extends app_node {
 		]);
 
 		for (const roll of this.settings.rolls) {
-			add_roll(roll);
+			add_roll(roll, false);
 		}
 	}
 
 	update () {
 		super.update();
+	}
+	
+	*roll_the_dice (parsed_roll, add_history) {
+		// clear everything from the previous roll
+		this.clear_previous_roll();
+		
+		// show the name parsed_roll.name on screen
+		this.table.update([['.txt_table_title', 'innerText', parsed_roll.name + ': ' + parsed_roll.description]]);
+		
+		let result = 0;
+		let count = parsed_roll.dice.length + parsed_roll.modifiers.length;
+		
+		let padding = 40;
+		let space = (264 - padding) / count;
+		let x = (space + padding) * 0.5;
+		
+		// roll each dice in the parsed roll
+		// then add the set modifiers
+		for (const d of parsed_roll.dice) {
+			let this_dice = Math.floor((Math.random() * Math.abs(d))) + 1;
+			if (d < 0) {
+				this_dice = -this_dice;
+			}
+			const div_roll = this.column1.clone('template_dice_value', [
+				['.txt_dice_value', 'innerText', this_dice],
+			]);
+			div_roll.position(x, 45);
+			result += this_dice;
+			this.roll_elements.push(div_roll);
+			
+			// wait between each step
+			yield sequence.yield_frames(30);
+			x += space;
+		}
+		
+		for (const m of parsed_roll.modifiers) {
+			const div_roll = this.column1.clone('template_modifier_value', [
+				['.txt_modifier_value', 'innerText', m],
+			]);
+			div_roll.position(x, 45);
+			result += m;
+			this.roll_elements.push(div_roll);
+		
+			// wait between each step
+			yield sequence.yield_frames(30);
+			x += space;
+		}
+		
+		// final pause before showing the total
+		this.table.update([['.txt_table_result', 'innerText', result]]);
+		
+		// add to history
+		add_history(parsed_roll.name, result);
+	}
+	
+	clear_previous_roll () {
+		this.table.update([
+			['.txt_table_title', 'innerText', ''],
+			['.txt_table_result', 'innerText', ''],
+		]);
+		for (const el of this.roll_elements) {
+			el.remove();
+		}
+		this.roll_elements = [];
 	}
 
 }
