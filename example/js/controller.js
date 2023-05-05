@@ -1,7 +1,6 @@
 // Copyright 2022 Samuel Baird
-import { resource, sequence, state, dom, app_node } from '../../lib/litre/litre.js';
+import { sequence, dom, app_node } from '../../lib/litre/litre.js';
 
-let assets_are_loaded = false;
 let settings = {};
 
 // reload the current settings from browser storage
@@ -23,20 +22,12 @@ if (settings.rolls.length == 0) {
 	add_roll('Save (bane): D20 - D4');
 }
 
-function set_assets_are_loaded () {
-	assets_are_loaded = true;
-}
-
-function app_state () {
-	if (!assets_are_loaded) {
-		return state.atom('loading_state');
-	} else {
-		return state.atom('app_state', { settings: settings });
-	}
-}
-
 function save_settings () {
 	window.localStorage.setItem('dice_roller_settings', JSON.stringify(settings));
+}
+
+function get_settings () {
+	return settings;
 }
 
 function parse_roll (roll) {
@@ -129,4 +120,4 @@ function add_to_history (name, total) {
 
 }
 
-export { app_state, set_assets_are_loaded, save_settings, parse_roll, add_roll, remove_roll, add_to_history };
+export { save_settings, get_settings, parse_roll, add_roll, remove_roll, add_to_history };

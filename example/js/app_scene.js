@@ -1,11 +1,11 @@
-import { resource, sequence, state, dom, app_node } from '../../lib/litre/litre.js';
+import { sequence, dom, app_node } from '../../lib/litre/litre.js';
 import * as controller from './controller.js';
 
 class app_scene extends app_node {
 
-	constructor (game_state) {
+	constructor (settings) {
 		super();
-		this.settings = game_state.props.settings;
+		this.settings = settings;
 		this.layout = 'vertical';
 		this.roll_elements = [];
 	}
@@ -67,7 +67,7 @@ class app_scene extends app_node {
 					}],
 					['.btn_delete', 'onclick', (e) => {
 						e.stopPropagation(); // no click through
-						controller.remove_roll(div_roll.node('.txt_roll_hidden').element.value);
+						controller.remove_roll(div_roll.find('.txt_roll_hidden').value);
 						div_roll.remove();
 					}],
 				]);
@@ -86,7 +86,7 @@ class app_scene extends app_node {
 		}
 		const div_add = this.column2.clone('template_add_roll', [
 			['.btn_add', 'onclick', () => {
-				const new_roll = div_add.node('.txt_add').element.value;
+				const new_roll = div_add.find('.txt_add').value;
 				try {
 					// see if we can successfully parse it or error out
 					const parsed_roll = controller.parse_roll(new_roll);
@@ -95,7 +95,7 @@ class app_scene extends app_node {
 					// add the new roll to the layout
 					add_roll(new_roll, true);
 					// reset the textbox
-					div_add.node('.txt_add').element.value = '';
+					div_add.find('.txt_add').value = '';
 				} catch (error) {
 					alert(error);
 				}

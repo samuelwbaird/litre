@@ -76,39 +76,19 @@
 		<div id="screen">
 		</div>
 
-		<div id="loading_layer" style="position: absolute; top: 0px; left: 0px; margin: 5px; padding: 10px; color: #fff; background:#666;">
-			<p>loading</p>
-		</div>
-
 		<script type="module" charset="UTF-8">
 			// launch app with nominal sizing
 			import * as litre from '../lib/litre/litre.js';
 
 			import * as controller from './js/controller.js';
-			import loading_scene from './js/loading_scene.js';
 			import app_scene from './js/app_scene.js';
 
 			const app = litre.launch_app();
-			
-			const top_level_state = new litre.state.state_switch([
-				// stay in the loading state until loaded
-				[ 'loading_state', () => { app.set_scene(new loading_scene()); }],
-				// current API session is valid
-				// [ 'establish_session_state', () => { app.set_scene(new establish_session_scene()); }],
-				// main state of the app
-				[ 'app_state', (state) => { app.set_scene(new app_scene(state)); }],
-				// reset to a blank slate on window resize, full node reset
-				[ 'reset_on_resize', () => { app.set_scene(new litre.app_node()); }],
-			]);
-
-			// refresh app node tree from current controller state
-			app.hook(() => {
-				top_level_state.update(controller.app_state());
-			});
+			app.set_scene(new app_scene(controller.get_settings()));
 
 			// force a reset in state on window resize
 			window.addEventListener('resize', () => {
-				top_level_state.update(litre.state.atom('reset_on_resize'));
+				app.set_scene(new app_scene(controller.get_settings()));
 			});
 		</script>
 	</body>
