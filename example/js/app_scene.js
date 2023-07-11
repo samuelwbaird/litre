@@ -49,7 +49,7 @@ class app_scene extends app_node {
 			]);
 
 			this.history_parent.element.insertBefore(div_roll_history.element, this.history_parent.element.firstChild);
-			
+
 			div_roll_history.element.style.opacity = 0;
 			this.tween(div_roll_history.element.style, sequence.easing.linear(20), { opacity: 1 });
 		};
@@ -71,7 +71,7 @@ class app_scene extends app_node {
 						div_roll.remove();
 					}],
 				]);
-			
+
 				if (fade_in) {
 					div_roll.element.style.opacity = 0;
 					this.tween(div_roll.element.style, sequence.easing.linear(20), { opacity: 1 });
@@ -110,21 +110,21 @@ class app_scene extends app_node {
 	update () {
 		super.update();
 	}
-	
+
 	*roll_the_dice (parsed_roll, add_history) {
 		// clear everything from the previous roll
 		this.clear_previous_roll();
-		
+
 		// show the name parsed_roll.name on screen
 		this.table.update([['.txt_table_title', 'innerText', parsed_roll.name + ': ' + parsed_roll.description]]);
-		
+
 		let result = 0;
-		let count = parsed_roll.dice.length + parsed_roll.modifiers.length;
-		
-		let padding = 40;
-		let space = (264 - padding) / count;
+		const count = parsed_roll.dice.length + parsed_roll.modifiers.length;
+
+		const padding = 40;
+		const space = (264 - padding) / count;
 		let x = (space + padding) * 0.5 - 16;
-		
+
 		// roll each dice in the parsed roll
 		// then add the set modifiers
 		for (const d of parsed_roll.dice) {
@@ -135,7 +135,7 @@ class app_scene extends app_node {
 			const div_roll = this.column1.clone('template_dice_value', [
 				['.txt_dice_value', 'innerText', this_dice],
 			]);
-			
+
 			// let's tween it into place
 			div_roll.position(x - 100, 29 - 40);
 			for (let i = 0; i <= 35; i++) {
@@ -144,23 +144,23 @@ class app_scene extends app_node {
 				});
 			}
 			this.tween(div_roll.element.style, sequence.easing.ease_out(50), {
-				left: x, 
+				left: x,
 			});
 			this.tween(div_roll.element.style, sequence.easing.interpolate([0, 1, 0.5, 1, 0.75, 1], 45), {
 				top: 29,
 			});
-			
-			
+
+
 			result += this_dice;
 			this.roll_elements.push(div_roll);
-			
+
 			// wait between each step
 			yield sequence.yield_frames(25);
 			x += space;
 		}
-		
-		yield sequence.yield_frames(20);	
-		
+
+		yield sequence.yield_frames(20);
+
 		for (const m of parsed_roll.modifiers) {
 			const div_roll = this.column1.clone('template_modifier_value', [
 				['.txt_modifier_value', 'innerText', m],
@@ -168,24 +168,24 @@ class app_scene extends app_node {
 			div_roll.position(x, 29);
 			result += m;
 			this.roll_elements.push(div_roll);
-		
+
 			div_roll.element.style.opacity = 0;
 			this.tween(div_roll.element.style, sequence.easing.linear(20), {
 				opacity: 1,
 			});
-		
+
 			// wait between each step
 			yield sequence.yield_frames(1);
 			x += space;
 		}
-		
+
 		// final pause before showing the total
 		this.table.update([['.txt_table_result', 'innerText', result]]);
-		
+
 		// add to history
 		add_history(parsed_roll.name, result);
 	}
-	
+
 	clear_previous_roll () {
 		this.table.update([
 			['.txt_table_title', 'innerText', ''],
