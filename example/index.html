@@ -81,14 +81,14 @@
 			import * as litre from '../lib/litre/litre.js';
 
 			import * as controller from './js/controller.js';
-			import app_scene from './js/app_scene.js';
+			import AppScene from './js/app_scene.js';
 
-			const app = litre.launch_app();
-			app.set_scene(new app_scene(controller.get_settings()));
+			const app = litre.launchApp();
+			app.setScene(new AppScene(controller.getSettings()));
 
 			// force a reset in state on window resize
 			window.addEventListener('resize', () => {
-				app.set_scene(new app_scene(controller.get_settings()));
+				app.setScene(new AppScene(controller.getSettings()));
 			});
 		</script>
 	</body>

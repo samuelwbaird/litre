@@ -1,12 +1,12 @@
 // Copyright 2022 Samuel Baird
-import { sequence, dom, app_node } from '../../lib/litre/litre.js';
+import { sequence, dom, AppNode } from '../../lib/litre/litre.js';
 
 let settings = {};
 
 // reload the current settings from browser storage
-const saved_settings = JSON.parse(window.localStorage.getItem('dice_roller_settings'));
-if (saved_settings != null) {
-	settings = saved_settings;
+const savedSettings = JSON.parse(window.localStorage.getItem('dice_roller_settings'));
+if (savedSettings != null) {
+	settings = savedSettings;
 }
 
 if (!settings.rolls) {
@@ -17,20 +17,20 @@ if (!settings.history) {
 }
 if (settings.rolls.length == 0) {
 	// some default data
-	add_roll('Attack: D20 + 5');
-	add_roll('Defend: 2D6 + 2');
-	add_roll('Save (bane): D20 - D4');
+	addRoll('Attack: D20 + 5');
+	addRoll('Defend: 2D6 + 2');
+	addRoll('Save (bane): D20 - D4');
 }
 
-function save_settings () {
+function saveSettings () {
 	window.localStorage.setItem('dice_roller_settings', JSON.stringify(settings));
 }
 
-function get_settings () {
+function getSettings () {
 	return settings;
 }
 
-function parse_roll (roll) {
+function parseRoll (roll) {
 	if (roll == null) {
 		throw 'roll description must not be blank';
 	}
@@ -39,10 +39,10 @@ function parse_roll (roll) {
 		throw 'roll description must not be blank';
 	}
 
-	const eat = (match, spit_it_out = false) => {
+	const eat = (match, spitItOut = false) => {
 		const result = roll.match(match);
 		if (result) {
-			if (!spit_it_out) {
+			if (!spitItOut) {
 				roll = roll.substring(result[0].length);
 				roll = roll.trim();
 			}
@@ -66,26 +66,26 @@ function parse_roll (roll) {
 	const dice = [];
 	const modifiers = [];
 
-	let next_is_positive = true;
+	let nextIsPositive = true;
 	while (roll.length > 0) {
 		if (eat(/^[0-9]*d[0-9]+/i, true)) {
 			const number = parseInt(eat(/^[0-9]*/) || '1');
 			const d = eat(/^d/i);
-			const dice_type = parseInt(eat(/^[0-9]+/));
+			const diceType = parseInt(eat(/^[0-9]+/));
 			for (let i = 0; i < number; i++) {
-				dice.push(dice_type * (next_is_positive ? 1 : -1));
+				dice.push(diceType * (nextIsPositive ? 1 : -1));
 			}
-			description = description + (next_is_positive ? '' : '-') + number + 'D' + dice_type + ' ';
-			next_is_positive = true;
+			description = description + (nextIsPositive ? '' : '-') + number + 'D' + diceType + ' ';
+			nextIsPositive = true;
 		} else if (eat(/^[0-9]+/i, true)) {
 			const number = parseInt(eat(/^[0-9]+/i));
-			description = description + (next_is_positive ? '+' : '-') + number + ' ';
-			modifiers.push(number * (next_is_positive ? 1 : -1));
-			next_is_positive = true;
+			description = description + (nextIsPositive ? '+' : '-') + number + ' ';
+			modifiers.push(number * (nextIsPositive ? 1 : -1));
+			nextIsPositive = true;
 		} else if (eat(/^\-/)) {
-			next_is_positive = false;
+			nextIsPositive = false;
 		} else if (eat(/^\+/)) {
-			next_is_positive = true;
+			nextIsPositive = true;
 		} else {
 			throw 'unknown dice or modifier ' + roll;
 		}
@@ -103,21 +103,21 @@ function parse_roll (roll) {
 	};
 }
 
-function add_roll (roll) {
+function addRoll (roll) {
 	settings.rolls.push(roll);
-	save_settings();
+	saveSettings();
 }
 
-function remove_roll (roll) {
+function removeRoll (roll) {
 	const i = settings.rolls.indexOf(roll);
 	if (i >= 0) {
 		settings.rolls.splice(i, 1);
-		save_settings();
+		saveSettings();
 	}
 }
 
-function add_to_history (name, total) {
+function addToHistory (name, total) {
 
 }
 
-export { save_settings, get_settings, parse_roll, add_roll, remove_roll, add_to_history };
+export { saveSettings, getSettings, parseRoll, addRoll, removeRoll, addToHistory };
