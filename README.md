@@ -19,28 +19,36 @@ The main ideas informing this new version are:
  * revisit propagtion of events
  * revisit handling of special case timers and hooks
 
-###Examples
-Run a basic web server from the root directory
+### Examples
+Run a basic web server from the root directory, and then view the /examples/ subfolder in browser.
 
 	python -m SimpleHTTPServer
 	python3 -m http.server
 
 
 #### Dice
-Working on a dice roller / live character sheet for a dice pool based TTRPG.
+Example project is a generic dice roller, allowing you to specify and trigger preconfigured dice rolls, eg. 2D6+4
+
 
 Open http://localhost:8000/example/ in the browser
 
+#### Swipe Together
+Combining litre, with a brogue/lua based backend, create a list of anything you need to choose, then share it with as many people as you need to find consensus with a "Tinder" style swipe interface.
+
+
+View live at <https://tinywideopenspaces.com/swipetogether/>
+
+
+DONE
+
+ * created plugin system, and included pixijs integration via a plugin
+ * transparent wrapped dom integration
+ * migrate to JS standards camel casing
+ * DOM template and update spec
+ * tween, coroutine, and delay integration
 
 TODO
 
- * dom integration, should there be a dom link object or should the dom elements become wrapped (and unwrapped), should it try to transparently wrap using proxy instead of modify? (two identity problem)
- * continue work on dice roller and see if a non-positioned approach works well (position two columns only)
- * check that template spec can set event listeners
+ * reconsider state transition ideas (referring to template update, and pixiview create)
  * template update spec for lists (parent, collection, mapping function)
- * tween some nodes
- * maybe when the template populates a list, the parent node should be marked up with methods to help maintain that list (or provide functionality like sort, or drag)
- * app node switch and list state mapping
- * resource loading queries, then image, then ?
- * screen space touch handling
 
