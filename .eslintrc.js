@@ -3,7 +3,9 @@ module.exports = {
 		'browser': true,
 		'es6': true,
 	},
-
+	'globals': {
+		'PIXI': true,
+	},
 	'extends': 'eslint:recommended',
 	'parserOptions': {
 		'ecmaVersion': 2020,
